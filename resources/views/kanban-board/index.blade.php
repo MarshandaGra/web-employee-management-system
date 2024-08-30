@@ -10,7 +10,7 @@
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     @forelse ($kanbanboards as $board)
-                        <li><a class="dropdown-item" href="{{ route('kanbanboard.index', ['id' => $board->id]) }}">
+                        <li><a class="dropdown-item" href="{{ route('kanban-board.index', ['id' => $board->id]) }}">
                                 {{ $board->name }}
                             </a>
                         </li>
@@ -37,7 +37,7 @@
                             </div>
                             <div class="card-body">
                                 @forelse ($$status as $task)
-                                    @include('kanbanboard.partial.task-card', [
+                                    @include('kanban-board.partial.task-card', [
                                         'task' => $task,
                                         'nextStatus' =>
                                             $status === 'todo'
@@ -46,10 +46,10 @@
                                                     ? 'done'
                                                     : ''),
                                     ])
-                                    @include('kanbanboard.partial.edit-task-modal', [
+                                    @include('kanban-board.partial.edit-task-modal', [
                                         'modalId' => 'editTaskModal' . $task->id,
                                         'title' => 'Edit Task',
-                                        'actionUrl' => route('kanbantasks.update', $task->id),
+                                        'actionUrl' => route('kanban-tasks.update', $task->id),
                                         'method' => 'patch',
                                         'buttonText' => 'Update Task',
                                         'task' => $task,
@@ -79,14 +79,14 @@
     </div>
 
     @foreach (['todo' => 'To Do', 'progress' => 'In Progress', 'done' => 'Done'] as $status => $statusTitle)
-        @include('kanbanboard.partial.task-modal', [
+        @include('kanban-board.partial.task-modal', [
             'modalId' => 'createTaskModal' . ucfirst($status) . ($kanbanboard->id ?? ''),
             'title' => 'Create New Task',
-            'actionUrl' => route('kanbantasks.store'),
+            'actionUrl' => route('kanban-tasks.store'),
             'method' => 'post',
             'buttonText' => 'Create',
             'status' => $status,
-            'task' => new \App\Models\KanbanTasks(),
+            'task' => new \App\Models\KanbanTask(),
         ])
     @endforeach
 @endsection

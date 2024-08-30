@@ -12,22 +12,19 @@ class DepartmentSeeder extends Seeder
      */
     public function run(): void
     {
+
         DB::table('departments')->insert([
             [
-                'name' => 'Keuangan',
-                'description' => 'Departemen Keuangan.',
+                'company_id' => 1,
+                'name' => 'Human Resources',
+                'description' => 'Handles employee relations and company policies.',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Digital Marketing',
-                'description' => 'Departemen Digital Marketing.',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Website',
-                'description' => 'Departemen Website.',
+                'company_id' => 1,
+                'name' => 'Engineering',
+                'description' => 'Develops and maintains products and systems.',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

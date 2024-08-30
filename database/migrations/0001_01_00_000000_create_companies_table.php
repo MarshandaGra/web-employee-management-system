@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('salaries', function (Blueprint $table) {
-            $table->dropColumn('employee');
+        Schema::create('companies', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('address');
+            $table->string('contact_email');
+            $table->string('company_code')->unique()->nullable();
+            $table->timestamps();
         });
     }
 
@@ -21,8 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('salaries', function (Blueprint $table) {
-            $table->string('employee'); 
-        });
+        Schema::dropIfExists('companies');
     }
 };

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EmployeeDetailRequest;
 use App\Models\Department;
 use App\Models\EmployeeDetail;
-use App\Models\EmployeeDetails;
 use App\Models\Position;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,8 +12,20 @@ use Illuminate\Support\Facades\Storage;
 
 use function Laravel\Prompts\search;
 
-class EmployeeDetailsController extends Controller
+class EmployeeDetailController extends Controller
 {
+    // Display list of employee for user page
+    public function user_index()
+    {
+        $employees = EmployeeDetail::select('employee_details.*', 'users.name as user_name', 'departments.name as department_name')
+            ->join('users', 'employee_details.user_id', '=', 'users.id')
+            ->join('departments', 'employee_details.department_id', '=', 'departments.id')
+            ->paginate(6);
+
+        return view('userKaryawan.index', compact('employees'));
+    }
+
+    //  Display a listing of the resource.
     public function index(Request $request)
     {
         $search = $request->get('search');
@@ -51,17 +62,6 @@ class EmployeeDetailsController extends Controller
             ->paginate(10);
         return view('employee.index', compact('employees'));
     }
-
-    public function userKaryawan()
-    {
-        $employees = EmployeeDetail::select('employee_details.*', 'users.name as user_name', 'departments.name as department_name')
-            ->join('users', 'employee_details.user_id', '=', 'users.id')
-            ->join('departments', 'employee_details.department_id', '=', 'departments.id')
-            ->paginate(6);
-
-        return view('userKaryawan.index', compact('employees'));
-    }
-
 
     /**
      * Show the form for creating a new resource.

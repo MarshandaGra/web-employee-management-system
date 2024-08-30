@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\KanbanBoard;
-use App\Models\KanbanTasks;
-use App\Models\Project;
+use App\Models\Company;
 use Illuminate\Http\Request;
 
-class MyprojectController extends Controller
+class CompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $kanbanboard = KanbanBoard::with(['project', 'kanbantasks'])->get();
-        return view('myproject.index', compact('kanbanboard'));
+        //
     }
 
     /**
@@ -37,7 +34,7 @@ class MyprojectController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Company $company)
     {
         //
     }
@@ -45,7 +42,7 @@ class MyprojectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Company $company)
     {
         //
     }
@@ -53,7 +50,7 @@ class MyprojectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Company $company)
     {
         //
     }
@@ -61,7 +58,7 @@ class MyprojectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Company $company)
     {
         //
     }

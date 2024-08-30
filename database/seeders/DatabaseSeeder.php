@@ -17,21 +17,29 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Department::factory(25)->create();
-        Position::factory(25)->create();
+        // Department::factory(25)->create();
+        // Position::factory(25)->create();
 
-        Department::create([
-            'name' => 'Keuangan',
-            'description' => 'Keuangan Description'
-        ]);
+        // Department::create([
+        //     'name' => 'Keuangan',
+        //     'description' => 'Keuangan Description'
+        // ]);
 
+        // $this->call([
+        //     DepartmentSeeder::class,
+        //     PositionSeeder::class,
+        //     RoleSeeder::class,
+        //     UserSeeder::class,
+        //     EmployeeDetailsSeeder::class,
+        //     ProjectSeeder::class,
+        // ]);
         $this->call([
-            DepartmentSeeder::class,
-            PositionSeeder::class,
+            CompanySeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
+            DepartmentSeeder::class,
+            PositionSeeder::class,
             EmployeeDetailsSeeder::class,
-            ProjectSeeder::class,
         ]);
     }
 }

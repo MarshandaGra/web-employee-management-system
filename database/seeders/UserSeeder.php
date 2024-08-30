@@ -14,19 +14,22 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Menambahkan pengguna
         $users = [
             [
-                'name' => 'Admin User',
-                'email' => 'admin@example.com',
-                'password' => Hash::make('password123'),
-                'role' => 'manajer', // Pastikan role ini sudah ada di tabel roles
+                'name' => 'Manager',
+                'email' => 'manager@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'manager',
+                'company_id' => 1,
+                'status' => 'approved'
             ],
             [
                 'name' => 'Employee User',
                 'email' => 'employee@example.com',
-                'password' => Hash::make('password123'),
-                'role' => 'karyawan', // Pastikan role ini sudah ada di tabel roles
+                'password' => Hash::make('password'),
+                'role' => 'employee',
+                'company_id' => 1,
+                'status' => 'approved'
             ],
         ];
 
@@ -35,6 +38,8 @@ class UserSeeder extends Seeder
                 'name' => $userData['name'],
                 'email' => $userData['email'],
                 'password' => $userData['password'],
+                'company_id' => $userData['company_id'],
+                'status' => $userData['status']
             ]);
 
             // Assign role if Spatie Laravel Permission is used

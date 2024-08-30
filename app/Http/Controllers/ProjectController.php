@@ -2,27 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\ProjectRequest;
 use App\Models\KanbanBoard;
 use App\Models\Project;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
+    // display a list of user project
+    public function my_project()
+    {
+        $kanbanboard = KanbanBoard::with(['project', 'kanbantasks'])->get();
+        return view('myproject.index', compact('kanbanboard'));
+    }
 
-    public function markAsCompleted($id)
-{
-    $project = Project::findOrFail($id);
+    // Mark a project as completed
+    public function mark_completed($id)
+    {
+        $project = Project::findOrFail($id);
 
-    Project::where('id', $id)->update([
-        'status' => 'Completed',
-        'completed_at' => Carbon::now(),
-        'name' => $project->name, // Pastikan 'name' diambil dari proyek yang ada
-    ]);
+        Project::where('id', $id)->update([
+            'status' => 'Completed',
+            'completed_at' => Carbon::now(),
+            'name' => $project->name, // Pastikan 'name' diambil dari proyek yang ada
+        ]);
 
-    return redirect()->route('projects.index')->with('success', 'Proyek telah berhasil diselesaikan.');
-}
+        return redirect()->route('projects.index')->with('success', 'Proyek telah berhasil diselesaikan.');
+    }
 
 
     /**
@@ -31,7 +39,7 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
 
-        $query = Project::query();
+        $query = Project::query()->where('company_id', Auth::user()->company->id);
 
         // Pencarian
         $search = $request->input('search');
@@ -55,7 +63,7 @@ class ProjectController extends Controller
         $sortDirection = $request->input('sortDirection', 'asc'); // Default sort direction 'asc'
 
         // Dapatkan hasil query dengan pagination
-        $projects = $query->orderBy($sortBy, $sortDirection)->paginate(10);
+        $projects = $query->orderBy($sortBy, $sortDirection)->paginate(6);
         $projects->appends($request->all());
 
         return view('projects.index', compact('projects'));
@@ -64,9 +72,12 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProjectRequest $request)
+    public function store(ProjectRequest $request)
     {
-        $project = Project::create($request->validated());
+        $validatedData = $request->validated();
+
+        $validatedData['company_id'] = Auth::user()->company->id;
+        $project = Project::create($validatedData);
         KanbanBoard::create([
             'name' => $project->name,
             'project_id' => $project->id
@@ -85,7 +96,7 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreProjectRequest $request, Project $project)
+    public function update(ProjectRequest $request, Project $project)
     {
         $project->update($request->validated());
         return redirect()->route('projects.index')->with('success', 'Project berhasil diperbarui');
