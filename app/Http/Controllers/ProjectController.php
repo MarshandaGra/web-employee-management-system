@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProjectRequest;
+use App\Models\EmployeeDetail;
 use App\Models\KanbanBoard;
 use App\Models\Project;
 use Carbon\Carbon;
@@ -66,7 +67,11 @@ class ProjectController extends Controller
         $projects = $query->orderBy($sortBy, $sortDirection)->paginate(6);
         $projects->appends($request->all());
 
-        return view('projects.index', compact('projects'));
+        $employees = EmployeeDetail::whereHas('user', function ($query) {
+            $query->where('company_id', Auth::user()->company_id);
+        })->get();
+
+        return view('projects.index', compact('projects', 'employees'));
     }
 
     /**
@@ -82,15 +87,9 @@ class ProjectController extends Controller
             'name' => $project->name,
             'project_id' => $project->id
         ]);
-        return redirect()->route('projects.index')->with('success', 'Project berhasil ditambah');
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Project $project)
-    {
-        return view('projects.edit', compact('project'));
+        $project->employee_details()->attach($request->employee_id);
+        return redirect()->route('projects.index')->with('success', 'Project berhasil ditambah');
     }
 
     /**
@@ -99,6 +98,7 @@ class ProjectController extends Controller
     public function update(ProjectRequest $request, Project $project)
     {
         $project->update($request->validated());
+        $project->employee_details()->sync($request->employee_id);
         return redirect()->route('projects.index')->with('success', 'Project berhasil diperbarui');
     }
 

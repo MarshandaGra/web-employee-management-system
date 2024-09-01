@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('project_assignments', function (Blueprint $table) {
+        Schema::create('invitation_codes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->constrained('projects', 'id');
-            $table->foreignId('employee_id')->constrained('employee_details', 'id');
-            $table->date('assigned_at')->default(date('Y-m-d'));
+            $table->string('code');
+            $table->foreignId('company_id')->constrained('companies', 'id');
+            $table->foreignId('used_by')->nullable()->constrained('employee_details', 'id');
+            $table->enum('status', ['unused', 'used', 'expired'])->default('unused');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('project_assignments');
+        Schema::dropIfExists('invitation_codes');
     }
 };

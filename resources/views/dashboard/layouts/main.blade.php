@@ -162,11 +162,11 @@
                                                     </div>
                                                 </a>
                                             </div>
-                                            <div class="d-grid py-4 px-7 pt-8">
+                                            <div class="py-4 px-7 pt-8">
                                                 <form action="{{ route('logout') }}" method="post">
                                                     @csrf
 
-                                                    <button type="submit" class="btn btn-outline-primary">Keluar</button>
+                                                    <button type="submit" class="btn btn-outline-primary col-12">Keluar</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -202,7 +202,6 @@
 
     <script src="{{ asset('dist/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('dist/js/datatable/datatable-basic.init.js') }}"></script>
-    <script src="../../dist/libs/apexcharts/dist/apexcharts.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     {{-- Select2 --}}

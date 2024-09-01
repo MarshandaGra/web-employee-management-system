@@ -70,13 +70,21 @@
                     <!-- Welcome Intro Start -->
                     <div class="col-12 col-md-7 col-lg-6">
                         <div class="welcome-intro">
-                            <h1 class="text-white">Tingkatkan Manajemen Karyawan Anda dengan EMS</h1>
+                            <h1 class="text-white">Manajemen Karyawan Anda dengan EMS</h1>
                             <p class="text-white my-4">EMS (Employee Management System) adalah aplikasi inovatif untuk
                                 mengelola karyawan secara efisien. Dapatkan wawasan mendalam tentang kinerja, absensi,
-                                dan pengembangan karyawan Anda. Mulailah perjalanan menuju manajemen karyawan yang lebih
-                                efektif dan terorganisir dengan EMS.</p>
-
+                                dan pengembangan karyawan Anda.</p>
                         </div>
+                        <form action="{{ route('create.applicant') }}">
+                            <div class="form-group" class="text-white">
+                                <label for="applicant" class="text-white">Laraman :</label>
+                                <input type="text" id="applicant" name="applicant">
+                                <button type="submit">Lanjutkan</button>
+                                @error('applicant')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </form>
                     </div>
                     <div class="col-12 col-md-5 col-lg-6">
                         <!-- Welcome Thumb -->
