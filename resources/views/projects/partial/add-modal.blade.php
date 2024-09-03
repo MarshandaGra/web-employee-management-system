@@ -22,6 +22,16 @@
                         @enderror
                     </div>
                     <div class="mb-3">
+                        <label for="price" class="form-label">Harga</label>
+                        <input type="numeric" name="price" class="form-control @error('price') is-invalid @enderror"
+                            id="price" value="{{ old('price') }}">
+                        @error('price')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
                         <label for="description" class="form-label">Deskripsi</label>
                         <input type="text" name="description"
                             class="form-control @error('description') is-invalid @enderror" id="description"
@@ -32,10 +42,33 @@
                             </div>
                         @enderror
                     </div>
+                    {{-- <div class="mb-3">
+                        <label for="department_id" class="form-label">Departemen</label>
+                        <select name="department_id" class="form-control @error('department_id') is-invalid @enderror" id="department_id">
+                            <option value="">Pilih Departemen</option>
+                            @forelse ($departments as $department)
+                                <option value="{{ $department->id }}" {{ old('department_id') == $department->id ? 'selected' : '' }}>
+                                    {{ $department->name }}
+                                </option>
+                            @empty
+                                <option disabled>Tidak ada departemen.</option>
+                            @endforelse
+                        </select>
+                        @error('department_id')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div> --}}
                     <div class="mb-3">
                         <label for="end_date" class="form-label">Ditugaskan kepada</label> <br>
                         <select class="js-example-basic-multiple form-control w-100" name="employee_id[]"
                             multiple="multiple">
+                            {{-- @forelse ($employees as $employee)
+                                <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                            @empty
+                                <option disabled>Tidak ada karyawan.</option>
+                            @endforelse --}}
                             @forelse ($employees as $employee)
                                 <option value="{{ $employee->id }}">{{ $employee->name }}</option>
                             @empty

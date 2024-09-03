@@ -62,6 +62,18 @@
                                 <div class="card-body">
                                     <p class="card-text">{{ Str::limit($project->description, 100) }}</p>
                                     <p class="card-text">
+                                        <strong>Departemen:</strong>
+                                        @if($project->employee_details->isNotEmpty())
+                                        <ul>
+                                            @foreach($project->employee_details->unique('department_id') as $employee_detail)
+                                                <li>{{ $employee_detail->department->name ?? 'Tidak Diketahui' }}</li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <span>-</span>
+                                    @endif
+                                    </p>
+                                    <p class="card-text">
                                         <strong>Status:</strong> {{ ucfirst($project->status) }}
                                     </p>
                                     <p class="card-text">
@@ -71,23 +83,32 @@
                                 </div>
                                 <div class="card-footer justify-content-between d-flex ">
                                     <div class="d-flex  gap-1">
-                                        <button class="btn btn-success btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#completeModal{{ $project->id }}"
-                                            type="button">Selesai</button>
-                                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#editModal{{ $project->id }}" type="button">Ubah</button>
+                                        @if($project->status !== 'completed')
+                                                @if($project->employee_details->isNotEmpty())
+                                                    <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                                        data-bs-target="#completeModal{{ $project->id }}" type="button">Selesai</button>
+                                                @endif        
+                                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#editModal{{ $project->id }}" type="button">Ubah</button>
+                                        @endif
                                         <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#vertical-center-modal{{ $project->id }}"
                                             type="button">Hapus</button>
                                     </div>
-                                    <a class="btn btn-info btn-sm"
-                                        href="{{ route('kanban-board.index', ['id' => $project->kanban_board->id]) }}">Kanban</a>
+                                    @if($project->kanban_board)
+                                        <a class="btn btn-info btn-sm"
+                                            href="{{ route('kanban-board.index', ['id' => $project->kanban_board->id]) }}">Kanban</a>
+                                    @endif
+
                                 </div>
                             </div>
                         </div>
 
+                        @if($project->employee_details->isNotEmpty())
+                            @include('projects.partial.complete-modal')
+                        @endif
+                        
                         @include('projects.partial.delete-modal')
-                        @include('projects.partial.complete-modal')
                         @include('projects.partial.edit-modal')
                     @empty
                         <div class="col-12

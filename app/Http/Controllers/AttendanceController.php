@@ -39,8 +39,6 @@ class AttendanceController extends Controller
     // display a list of each user attendance
     public function user_index()
     {
-
-
         $user = Auth::user()->employee_detail->id;
 
         $total_attendance = Attendance::where('employee_id', $user)->count();
@@ -57,23 +55,37 @@ class AttendanceController extends Controller
     /**
      * Store a newly attendance for each user.
      */
-    public function user_attendance()
+    public function user_attendance(Request $request)
     {
-        $today_attendance = Attendance::where('employee_id', Auth::id())
-            ->where('date', date('Y-m-d'))
+        $employee = Auth::user()->employee_detail->id;
+
+        $today = Carbon::today()->format('Y-m-d');
+        $now = Carbon::now();
+
+        $limit = (Carbon::parse(date('Y-m-d') . ' 08:00:00'));
+
+
+        if ($now->greaterThan($limit)) {
+            $status = 'late';
+        } else {
+            $status = 'present';
+        }
+
+        $today_attendance = Attendance::where('employee_id', $employee)
+            ->where('date', $today)
             ->exists();
 
         if ($today_attendance) {
-            return redirect()->route('attendance.user')->with('info', 'Kamu sudah absen!');
+            return redirect()->route($request->route)->with('info', 'Kamu sudah absen!');
         }
 
         Attendance::create([
-            'employee_id' => Auth::id(),
-            'date' => date('Y-m-d'),
-            'status' => 'present',
+            'employee_id' => $employee,
+            'date' => $today,
+            'status' => $status,
         ]);
 
-        return redirect()->route('attendance.user')->with('success', 'Berhasil absen!');
+        return redirect()->route($request->route)->with('success', 'Berhasil absen!');
     }
 
 

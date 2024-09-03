@@ -18,10 +18,12 @@
                         </div>
                     </div>
                     <div class="col-xl-7 col-xxl-7">
+
                         <div
                             class="authentication-login min-vh-100 bg-body row justify-content-center align-items-center p-4">
                             <div class="col-sm-8 col-md-8 col-xl-12">
-                                <div class="card-body wizard-content">
+
+                                <div class="card-body  wizard-content">
                                     <h4 class="card-title">Step wizard with validation</h4>
                                     <form action="{{ route('register') }}" class="validation-wizard wizard-circle mt-5"
                                         method="POST" enctype="multipart/form-data">
@@ -75,7 +77,7 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <!-- Step 2 -->
+
                                         <h6>Step 2</h6>
                                         <section>
                                             <div class="row">
@@ -138,4 +140,71 @@
 
         </div>
     </div>
+
+    {{-- <script>
+        var map = L.map('map').setView([-7.8965894, 112.6090665], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: ''
+        }).addTo(map);
+
+        var marker = null; // Initialize marker variable
+
+        // Function to update the marker and input fields
+        function updateMarker(lat, lng) {
+            if (!marker) {
+                // Create a new marker if it doesn't exist
+                marker = L.marker([lat, lng]).addTo(map);
+            } else {
+                // Move the existing marker to the new location
+                marker.setLatLng([lat, lng]);
+            }
+
+            map.setView([lat, lng], 15);
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+        }
+
+        // Event listener for the search button
+        document.getElementById('search-button').addEventListener('click', function() {
+            var location = document.getElementById('location-search').value;
+
+            if (location) {
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${location}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            var lat = data[0].lat;
+                            var lng = data[0].lon;
+                            updateMarker(lat, lng);
+                        } else {
+                            alert('Location not found.');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        });
+
+        $('#wizard').on('show.bs.tab', function(event) {
+            if ($(event.target).index() === 1) { // Sesuaikan index dengan step di mana peta berada
+                setTimeout(function() {
+                    map.invalidateSize(); // Memastikan ukuran peta diperbarui
+                }, 0);
+            }
+        });
+
+
+
+        // Panggil fungsi initializeMap saat dokumen siap
+        $(document).ready(function() {
+            initializeMap();
+        });
+
+        // Add a pin when the user clicks on the map
+        map.on('click', function(e) {
+            var lat = e.latlng.lat;
+            var lng = e.latlng.lng;
+            updateMarker(lat, lng);
+        });
+    </script> --}}
 @endsection

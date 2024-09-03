@@ -22,18 +22,27 @@ class Project extends Model
         });
     }
 
-    public function project_assignments()
-    {
-        return $this->hasMany(ProjectAssignment::class);
-    }
-
     public function kanban_board()
     {
         return $this->hasOne(KanbanBoard::class);
     }
 
-    public function employee_details(): mixed
+    // public function employee_details(): mixed
+    // {
+    //     return $this->belongsToMany(EmployeeDetail::class, 'project_assignments', 'project_id', 'employee_id');
+    // }
+    public function employee_details()
     {
         return $this->belongsToMany(EmployeeDetail::class, 'project_assignments', 'project_id', 'employee_id');
+    }
+
+    // public function department()
+    // {
+    //     return $this->belongsTo(Department::class);
+    // }
+
+    public function departments()
+    {
+        return $this->hasManyThrough(Department::class, EmployeeDetail::class, 'project_id', 'id', 'id', 'department_id');
     }
 }
