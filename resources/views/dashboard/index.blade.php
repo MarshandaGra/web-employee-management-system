@@ -108,16 +108,17 @@
                 </div>
             </div>
         </div>
-        {{-- @dd($activeCounts) --}}
-        <div class="row">
-            <div class="col-md-{{ isset($departments) && $department_data ? '8' : '12' }}">
-                <div id="projectsChart"></div>
-            </div>
-            <div class="col-md-4">
-                <div id="pieChart"></div>
-            </div>
-        </div>
+    </div>
 
+    {{-- Bagian untuk menampilkan chart --}}
+    <div class="row">
+        <div class="col-md-8">
+            <div id="projectsChart"></div>
+            <div id="attendanceBarChart"></div> <!-- Tambahkan elemen ini -->
+        </div>
+        <div class="col-md-4">
+            <div id="pieChart"></div>
+        </div>
     </div>
 
     <div class="col-md-12">
@@ -146,6 +147,11 @@
             @endforelse
         </div>
     </div>
+
+    <!-- Pastikan library ApexCharts selalu disertakan -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <!-- Script untuk Projects Chart -->
     @if (isset($project_data))
         <script>
             var projectData = @json($project_data);
@@ -223,22 +229,78 @@
         <p>Data tidak ditemukan.</p>
     @endif
 
-    @if (isset($departments))
-        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-        <script>
-            // Data untuk pie chart
-            var pieData = [1, 5, 5,
-                2
-            ] // Format data: [{ name: 'Kategori A', value: 20 }, { name: 'Kategori B', value: 30 }, ...]
+    <!-- Script untuk Attendance Bar Chart -->
+    <!-- Script untuk Attendance Bar Chart -->
+@if (isset($attendanceData))
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var attendanceOptions = {
+            series: [
+                {
+                    name: 'Present',
+                    data: @json($attendanceData['present'])
+                },
+                {
+                    name: 'Izin',
+                    data: @json($attendanceData['izin'])
+                },
+                {
+                    name: 'Alpha',
+                    data: @json($attendanceData['alpha'])
+                }
+            ],
+            chart: {
+                type: 'bar',
+                height: 350
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false, // Set horizontal ke false jika ingin bar vertical
+                    columnWidth: '55%',
+                    endingShape: 'rounded'
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                show: true,
+                width: 2,
+                colors: ['transparent']
+            },
+            xaxis: {
+                categories: @json($months) // Data bulan untuk sumbu x
+            },
+            yaxis: {
+                title: {
+                    text: 'Jumlah Kehadiran'
+                }
+            },
+            fill: {
+                opacity: 1
+            },
+            tooltip: {
+                y: {
+                    formatter: function (val) {
+                        return val + " Karyawan";
+                    }
+                }
+            }
+        };
 
-            // Opsi konfigurasi pie chart
+        var attendanceBarChart = new ApexCharts(document.querySelector("#attendanceBarChart"), attendanceOptions);
+        attendanceBarChart.render();
+    });
+</script>
+@else
+<p>Data kehadiran tidak ditemukan.</p>
+@endif
+
+
+    <!-- Script untuk Pie Chart Departemen -->
+    @if (isset($departments))
+        <script>
             var pieOptions = {
-                // series: pieData.map(function(item) {
-                //     return item.value;
-                // }),
-                // labels: pieData.map(function(item) {
-                //     return item.name;
-                // }),
                 series: @json($department_data),
                 labels: @json($departments),
                 chart: {
@@ -254,13 +316,12 @@
                 tooltip: {
                     y: {
                         formatter: function(val) {
-                            return val + " units";
+                            return val + " Karyawan";
                         }
                     }
                 }
             };
 
-            // Membuat dan merender pie chart
             var pieChart = new ApexCharts(document.querySelector("#pieChart"), pieOptions);
             pieChart.render();
         </script>
@@ -271,28 +332,18 @@
     <style>
         .card-danger {
             border: 2px solid #dc3545;
-            /* Red color for urgent deadlines */
             background-color: #f8d7da;
-            /* Light red background */
             border-radius: 4px;
-            /* Optional: for rounded corners */
             padding: 10px;
-            /* Optional: for inner spacing */
             margin-bottom: 10px;
-            /* Spacing between cards */
         }
 
         .card-primary {
             border: 2px solid #007bff;
-            /* Blue color for non-urgent deadlines */
             background-color: #cce5ff;
-            /* Light blue background */
             border-radius: 4px;
-            /* Optional: for rounded corners */
             padding: 10px;
-            /* Optional: for inner spacing */
             margin-bottom: 10px;
-            /* Spacing between cards */
         }
     </style>
 @endsection

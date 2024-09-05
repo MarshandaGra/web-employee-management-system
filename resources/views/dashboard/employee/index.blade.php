@@ -46,7 +46,15 @@
                     <button button type="submit" class="btn btn-success">Absen</button>
                 </form>
             </div>
-            <div id="chart"></div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div id="chart"></div>
+                </div>
+                <div class="col-md-4">
+                    <div id="attendanceBarChart"></div>
+                </div>
+            </div>
+
         </div>
     </div>
 
